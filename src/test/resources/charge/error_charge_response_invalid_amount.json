@@ -1,0 +1,4 @@
+{
+  "status": 400,
+  "message": "Charge amount can not be empty, 0 or negative"
+}

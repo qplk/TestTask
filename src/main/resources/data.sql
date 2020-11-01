@@ -1,0 +1,1 @@
+CREATE INDEX datetime_index on CHARGE_HISTORY(datetime asc);

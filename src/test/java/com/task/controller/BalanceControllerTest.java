@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.task.TestUtils.readFileAsString;
@@ -52,13 +53,15 @@ public class BalanceControllerTest {
     private ChargeService chargeService;
 
     @Before
-    public void before() throws Exception{
+    public void before(){
         ChargeResponseDTO successChargeResponse = new ChargeResponseDTO(1L, ZonedDateTime.of(2020, 10, 6, 7, 1, 1, 0, ZoneId.of("Europe/Moscow")));
         when(chargeService.processCharge(any(ChargeRequestDTO.class)))
                 .thenReturn(successChargeResponse);
-        List<HistoryResponseDTO> historyResponse = mapper.readValue(readFileAsString("src/test/resources/balance/balance_response_1.json"), new TypeReference<List<HistoryResponseDTO>>(){});
+        HistoryResponseDTO historyResponse = new HistoryResponseDTO(ZonedDateTime.now(), (float) 0.0);
+        List<HistoryResponseDTO> list = new ArrayList<>();
+        list.add(historyResponse);
         when(chargeService.getBalanceHistory(any(HistoryRequestDTO.class)))
-                .thenReturn(historyResponse);
+                .thenReturn(list);
     }
 
     @Test
@@ -73,7 +76,7 @@ public class BalanceControllerTest {
     @Test
     public void chargeWithInvalidAmountTest() throws Exception {
         mockMvc.perform(post("/api/v1/charge").contentType(MediaType.APPLICATION_JSON)
-                .content(readFileAsString("{ \"datetime\": \"2020-10-06T07:01:01+01:00\", \"amount\": 0}")))
+                .content("{ \"datetime\": \"2020-10-06T07:01:01+01:00\", \"amount\": 0}"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(readFileAsString("src\\test\\resources\\charge\\error_charge_response_invalid_amount.json")));

@@ -1,13 +1,10 @@
 package com.task.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.task.ApplicationTestConfig;
 import com.task.dto.HistoryRequestDTO;
 import com.task.dto.HistoryResponseDTO;
 import com.task.model.ChargeHistoryItem;
-import com.task.repository.ChargeHistoryRepository;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +43,12 @@ public class ChargeServiceImplIntegrationTest {
         ChargeHistoryItem chargeHistoryItem5 = buildHistoryItem((float) 4.9, ZonedDateTime.of(2020, 10, 27, 19, 17, 10, 0, ZoneId.of("Etc/UTC")));
         //2020-10-29 04:04:00 UTC
         ChargeHistoryItem chargeHistoryItem1 = buildHistoryItem((float) 1.1, ZonedDateTime.of(2020, 10, 29, 11, 4, 0, 0, ZoneId.of("Asia/Jakarta")));
-        //2020-10-29 08:56:10 UTC
-        ChargeHistoryItem chargeHistoryItem2 = buildHistoryItem((float) 2.4, ZonedDateTime.of(2020, 10, 29, 11, 56, 10, 0, ZoneId.of("Europe/Moscow")));
+        //2020-10-29 08:36:10 UTC
+        ChargeHistoryItem chargeHistoryItem2 = buildHistoryItem((float) 2.4, ZonedDateTime.of(2020, 10, 29, 11, 36, 10, 0, ZoneId.of("Europe/Moscow")));
+        //2020-10-29 08:26:10 UTC
+        ChargeHistoryItem chargeHistoryItem21 = buildHistoryItem((float) 2.4, ZonedDateTime.of(2020, 10, 29, 11, 26, 10, 0, ZoneId.of("Europe/Moscow")));
+        //2020-10-29 08:46:10 UTC
+        ChargeHistoryItem chargeHistoryItem22 = buildHistoryItem((float) 2.4, ZonedDateTime.of(2020, 10, 29, 11, 46, 10, 0, ZoneId.of("Europe/Moscow")));
         //2020-10-29 09:56:10 UTC
         ChargeHistoryItem chargeHistoryItem3 = buildHistoryItem((float) 1.0, ZonedDateTime.of(2020, 10, 29, 12, 56, 10, 0, ZoneId.of("Europe/Moscow")));
         //2020-10-31 11:32:10 UTC
@@ -60,6 +61,8 @@ public class ChargeServiceImplIntegrationTest {
         entityManager.persist(chargeHistoryItem5);
         entityManager.persist(chargeHistoryItem6);
         entityManager.persist(chargeHistoryItem7);
+        entityManager.persist(chargeHistoryItem21);
+        entityManager.persist(chargeHistoryItem22);
         entityManager.flush();
     }
 
@@ -82,9 +85,9 @@ public class ChargeServiceImplIntegrationTest {
     @Test
     public void getBalanceHistoryTestSameTimeInDifferentTimeZones() throws Exception {
         //2020-10-29 14:32:10 UTC
-        ZonedDateTime startTime = ZonedDateTime.of(2020, 10, 29, 14, 32, 10, 0, ZoneId.of("Etc/UTC"));
+        ZonedDateTime startTime = ZonedDateTime.of(2020, 10, 29, 7, 32, 10, 0, ZoneId.of("Etc/UTC"));
         //2020-10-29 16:32:10 UTC
-        ZonedDateTime endTime = ZonedDateTime.of(2020, 10, 29, 16, 32, 10, 0, ZoneId.of("Etc/UTC"));
+        ZonedDateTime endTime = ZonedDateTime.of(2020, 10, 29, 9, 32, 10, 0, ZoneId.of("Etc/UTC"));
 
         //2020-10-29 07:32:10 UTC
         ZonedDateTime startTimeTZ = ZonedDateTime.of(2020, 10, 29, 14, 32, 10, 0, ZoneId.of("Asia/Jakarta"));
